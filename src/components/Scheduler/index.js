@@ -29,16 +29,9 @@ class Scheduler extends Component {
     }
 
     _complete = (id) => {
-        console.log('complete', id);
-        // this.setState(({ todos }) => ({
-        //     todos: todos.map((todo) => {
-        //         if (todo.id === id) {
-        //             todo.completed = !todo.completed;
-        //         }
+        const { complete } = this.props.actions;
 
-        //         return todo;
-        //     }),
-        // }));
+        complete(id);
     }
 
     _changePriority = (id) => {
@@ -48,14 +41,9 @@ class Scheduler extends Component {
     }
 
     _completeAll = () => {
-        console.log('complete all');
-        // this.setState(({ todos }) => ({
-        //     todso: todos.map((todo) => {
-        //         todo.completed = true;
+        const { completeAll } = this.props.actions;
 
-        //         return todo;
-        //     }),
-        // }));
+        completeAll();
     };
 
     render () {

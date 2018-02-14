@@ -8,6 +8,8 @@ import { createTodoWorker } from './workers/createTodo';
 import { updateTodoWorker } from './workers/updateTodo';
 import { deleteTodoWorker } from './workers/deleteTodo';
 import { changePriorityWorker } from './workers/changePriority';
+import { completeWorker } from './workers/complete';
+import { completeAllWorker } from './workers/completeAll';
 
 export default Object.freeze({
     * fetchTodosWatcher () { // метод объекта генератор
@@ -24,5 +26,11 @@ export default Object.freeze({
     },
     * changePriorityWatcher () { // метод объекта генератор
         yield takeEvery(types.CHANGE_PRIORITY, changePriorityWorker);
+    },
+    * completeWatcher () { // метод объекта генератор
+        yield takeEvery(types.COMPLETE, completeWorker);
+    },
+    * completeAllWatcher () { // метод объекта генератор
+        yield takeEvery(types.COMPLETE_ALL, completeAllWorker);
     },
 });

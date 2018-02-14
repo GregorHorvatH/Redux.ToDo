@@ -10,6 +10,8 @@ export function* saga () {
         todos.createTodoWatcher(),
         todos.updateTodoWatcher(),
         todos.deleteTodoWatcher(),
-        todos.changePriorityWatcher()
+        todos.changePriorityWatcher(),
+        todos.completeWatcher(),
+        todos.completeAllWatcher()
     ]);
 }

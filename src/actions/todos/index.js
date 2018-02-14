@@ -43,6 +43,15 @@ export default Object.freeze({
         payload: id,
     }),
 
+    complete: (id) => ({
+        type:    types.COMPLETE,
+        payload: id,
+    }),
+
+    completeAll: () => ({
+        type: types.COMPLETE_ALL,
+    }),
+
     updateTodo: (todo) => ({
         type:    types.UPDATE_TODO,
         payload: todo,

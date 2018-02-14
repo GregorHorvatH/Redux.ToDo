@@ -7,3 +7,6 @@
 + `cd personal-project-task-manager`
 + `yarn` or `npm i`
 + `yarn start` or `npm start`
+
+## API
++ https://lab.lectrum.io/hw/todo/docs/#/docs/summary

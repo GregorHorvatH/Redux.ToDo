@@ -1,58 +1,73 @@
 // Core
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 // Instruments
 import Styles from './styles';
-import initialState from './todos';
 import Checkbox from 'theme/assets/Checkbox';
+import todosActions from '../../actions/todos';
 
 // Components
-import Task from 'components/Task';
+import Task from '../../components/Task';
 
-export default class Scheduler extends Component {
-    state = initialState;
+class Scheduler extends Component {
 
-    handleSubmit = (event) => event.preventDefault();
+    componentDidMount () {
+        const { fetchTodos } = this.props.actions;
 
-    complete = (id) =>
-        this.setState(({ todos }) => ({
-            todos: todos.map((todo) => {
-                if (todo.id === id) {
-                    todo.completed = !todo.completed;
-                }
+        fetchTodos();
+        this.input.focus();
+    }
 
-                return todo;
-            }),
-        }));
+    _handleSubmit = (event) => {
+        const { createTodo } = this.props.actions;
 
-    changePriority = (id) =>
-        this.setState(({ todos }) => ({
-            todos: todos.map((todo) => {
-                if (todo.id === id) {
-                    todo.important = !todo.important;
-                }
+        event.preventDefault();
+        createTodo(this.input.value);
+        this.input.value = '';
+    }
 
-                return todo;
-            }),
-        }));
+    _complete = (id) => {
+        console.log('complete', id);
+        // this.setState(({ todos }) => ({
+        //     todos: todos.map((todo) => {
+        //         if (todo.id === id) {
+        //             todo.completed = !todo.completed;
+        //         }
 
-    completeAll = () =>
-        this.setState(({ todos }) => ({
-            todso: todos.map((todo) => {
-                todo.completed = true;
+        //         return todo;
+        //     }),
+        // }));
+    }
 
-                return todo;
-            }),
-        }));
+    _changePriority = (id) => {
+        const { changePriority } = this.props.actions;
+
+        changePriority(id);
+    }
+
+    _completeAll = () => {
+        console.log('complete all');
+        // this.setState(({ todos }) => ({
+        //     todso: todos.map((todo) => {
+        //         todo.completed = true;
+
+        //         return todo;
+        //     }),
+        // }));
+    };
 
     render () {
-        const { todos } = this.state;
+        const { todos } = this.props;
+        const { deleteTodo } = this.props.actions;
         const allCompleted = todos.every((todo) => todo.completed);
         const todoList = todos.map(({ id, message, completed, important }) => (
             <Task
-                changePriority = { this.changePriority }
-                complete = { this.complete }
+                changePriority = { this._changePriority }
+                complete = { this._complete }
                 completed = { completed }
+                deleteTodo = { deleteTodo }
                 id = { id }
                 important = { important }
                 key = { id }
@@ -68,8 +83,12 @@ export default class Scheduler extends Component {
                         <input placeholder = 'Поиск' type = 'search' />
                     </header>
                     <section>
-                        <form onSubmit = { this.handleSubmit }>
-                            <input placeholder = 'Описание моей новой задачи' type = 'text' />
+                        <form onSubmit = { this._handleSubmit }>
+                            <input
+                                placeholder = 'Описание моей новой задачи'
+                                ref = { (ref) => this.input = ref }
+                                type = 'text'
+                            />
                             <button>Добавить задачу</button>
                         </form>
                         <ul>{todoList}</ul>
@@ -79,7 +98,7 @@ export default class Scheduler extends Component {
                             checked = { allCompleted }
                             color1 = '#363636'
                             color2 = '#fff'
-                            onClick = { this.completeAll }
+                            onClick = { this._completeAll }
                         />
                         <code>Все задачи выполнены</code>
                     </footer>
@@ -88,3 +107,13 @@ export default class Scheduler extends Component {
         );
     }
 }
+
+const mapStateToProps = ({ todos }) => ({
+    todos,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    actions: bindActionCreators({ ...todosActions }, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Scheduler);

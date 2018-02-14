@@ -10,17 +10,27 @@ import Edit from 'theme/assets/Edit';
 import Star from 'theme/assets/Star';
 
 export default class Task extends Component {
-    complete = () => {
+    _complete = () => {
         const { id, complete } = this.props;
 
         complete(id);
-    };
+    }
 
-    changePriority = () => {
+    _changePriority = () => {
         const { id, changePriority } = this.props;
 
         changePriority(id);
-    };
+    }
+
+    _handleEditClick = () => {
+
+    }
+
+    _handleDeleteClick = () => {
+        const { id, deleteTodo } = this.props;
+
+        deleteTodo(id);
+    }
 
     render () {
         const { completed, important, message } = this.props;
@@ -36,7 +46,7 @@ export default class Task extends Component {
                         checked = { completed }
                         color1 = '#3B8EF3'
                         color2 = '#FFF'
-                        onClick = { this.complete }
+                        onClick = { this._complete }
                     />
                     <code>{message}</code>
                 </div>
@@ -45,10 +55,18 @@ export default class Task extends Component {
                         checked = { important }
                         color1 = '#3B8EF3'
                         color2 = '#000'
-                        onClick = { this.changePriority }
+                        onClick = { this._changePriority }
                     />
-                    <Edit color1 = '#3B8EF3' color2 = '#000' />
-                    <Delete color1 = '#3B8EF3' color2 = '#000' />
+                    <Edit
+                        color1 = '#3B8EF3'
+                        color2 = '#000'
+                        onClick = { this._handleEditClick }
+                    />
+                    <Delete
+                        color1 = '#3B8EF3'
+                        color2 = '#000'
+                        onClick = { this._handleDeleteClick }
+                    />
                 </div>
             </li>
         );

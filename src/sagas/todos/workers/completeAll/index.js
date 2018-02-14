@@ -25,7 +25,7 @@ export function* completeAllWorker () {
                     ...todo,
                     todo:      todo.message,
                     favorites: !todo.important,
-                    completed: !todo.completed,
+                    completed: true,
                 }))
             ),
         });

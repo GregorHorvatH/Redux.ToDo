@@ -21,10 +21,10 @@ export default (state = initialState, action) => {
             ];
 
         case types.UPDATE_TODO_SUCCESS:
-            return state.map((todo) => todo.id === action.payload.id
-                ? action.payload
-                : todo
-            );
+            return state.map((item1) => ({
+                ...item1,
+                ...action.payload.find((item2) => item2.id === item1.id),
+            }));
 
         case types.DELETE_TODO_SUCCESS:
             return state.filter(

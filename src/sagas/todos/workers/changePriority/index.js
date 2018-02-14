@@ -12,9 +12,9 @@ export function* changePriorityWorker ({ payload: id }) {
     try {
         yield put(uiActions.startTodosFetching());
 
-        const todo = yield select(
+        const todos = yield select(
             (store) => store.todos.filter(
-                (item) => item.id === id
+                (todo) => todo.id === id
             )
         );
 
@@ -24,26 +24,28 @@ export function* changePriorityWorker ({ payload: id }) {
                 'Authorization': token,
                 'Content-Type':  'application/json',
             },
-            body: JSON.stringify([
-                {
-                    ...todo[0],
-                    todo:      todo[0].message,
-                    favorites: !todo[0].important,
-                }
-            ]),
+            body: JSON.stringify(
+                todos.map((todo) => ({
+                    ...todo,
+                    todo:      todo.message,
+                    favorites: !todo.important,
+                }))
+            ),
         });
 
-        const { data: newTodo, message } = yield call([response, response.json]);
+        const { data: newTodos, message } = yield call([response, response.json]);
 
         if (response.status !== 200) {
             throw new Error(message);
         }
 
-        yield put(todosActions.updateTodoSuccess({
-            ...newTodo[0],
-            message:   newTodo[0].todo,
-            important: newTodo[0].favorites,
-        }));
+        yield put(todosActions.updateTodoSuccess(
+            newTodos.map((todo) => ({
+                ...todo,
+                message:   todo.todo,
+                important: todo.favorites,
+            }))
+        ));
     } catch (error) {
         yield put(todosActions.updateTodoFail(error.message));
     } finally {

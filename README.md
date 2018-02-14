@@ -3,7 +3,7 @@
 
 ## In order to start a project follow these steps:
 
-+ `git clone git@github.com:Lectrum/personal-project-task-manager.git`
++ `git clone https://github.com/GregorHorvatH/Redux.ToDo.git`
 + `cd personal-project-task-manager`
 + `yarn` or `npm i`
 + `yarn start` or `npm start`

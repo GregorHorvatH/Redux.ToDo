@@ -6,6 +6,7 @@ import createSagaMiddleware from 'redux-saga';
 // Instruments
 import reducer from '../reducers';
 import { saga } from '../sagas';
+import { loadState } from '../helpers';
 
 // Environment check
 const dev = process.env.NODE_ENV === 'development'; // eslint-disable-line
@@ -30,11 +31,13 @@ const logger = createLogger({
     },
 });
 
+const persistedState = loadState();
+
 if (dev) {
     middleware.push(logger);
 }
 
 export { history };
-export default createStore(reducer, composeEnhancers(applyMiddleware(...middleware)));
+export default createStore(reducer, persistedState, composeEnhancers(applyMiddleware(...middleware)));
 
 sagaMiddleware.run(saga);

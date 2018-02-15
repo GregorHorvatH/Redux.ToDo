@@ -1,11 +1,14 @@
 @import '../../theme/palette';
 
+body {
+    background-color: $paletteColor3;
+}
+
 .scheduler {
     display: flex;
     justify-content: center;
-    // align-items: center;
+    align-items: center;
     height: 100vh;
-    background-color: $paletteColor3;
     user-select: none;
     -webkit-user-select: none;
 
@@ -18,6 +21,10 @@
         background-color: $paletteColor4;
         border-radius: 1rem;
         box-shadow: 0 0.6rem 1.4rem 0.1rem $rgbaColor2;
+
+        &.fixed {
+            align-self: flex-start;
+        }
 
         input:not([type='checkbox']) {
             height: 4.2rem;
@@ -91,7 +98,6 @@
                     border: 0;
                     cursor: pointer;
                     background-image: url('../../theme/assets/plus-icon.svg');
-                    backgorund-color: white;
                     background-repeat: no-repeat;
                     background-size: 1.8rem 1.8rem;
                     background-position: 6% 50%;

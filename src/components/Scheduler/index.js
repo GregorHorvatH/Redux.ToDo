@@ -13,16 +13,36 @@ import Task from '../../components/Task';
 
 class Scheduler extends Component {
 
-    state = {
-        search: '',
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            search: '',
+        };
+
+        window.onresize = () => {
+            this._setMainTopPosition();
+        };
     }
 
     componentDidMount () {
         const { fetchTodos } = this.props.actions;
         const { search } = this.state;
 
+        this._setMainTopPosition();
         fetchTodos({ search });
         this.input.focus();
+    }
+
+    /**
+     * фикс изображения компонента на маленьком экране
+     */
+    _setMainTopPosition = () => {
+        if (window.innerHeight < this.main.offsetHeight) {
+            this.main.className = Styles.fixed;
+        } else {
+            this.main.classList.remove(Styles.fixed);
+        }
     }
 
     _handleSubmit = (event) => {
@@ -87,7 +107,7 @@ class Scheduler extends Component {
 
         return (
             <section className = { Styles.scheduler }>
-                <main>
+                <main ref = { (ref) => this.main = ref }>
                     <header>
                         <h1>Планировщик задач</h1>
                         <input

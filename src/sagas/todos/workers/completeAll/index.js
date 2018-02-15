@@ -14,6 +14,8 @@ export function* completeAllWorker () {
 
         const todos = yield select((store) => store.todos);
 
+        const completed = yield Boolean(todos.find((todo) => !todo.completed));
+
         const response = yield call(fetch, `${api}`, {
             method:  'PUT',
             headers: {
@@ -24,8 +26,8 @@ export function* completeAllWorker () {
                 todos.map((todo) => ({
                     ...todo,
                     todo:      todo.message,
-                    favorites: !todo.important,
-                    completed: true,
+                    favorites: todo.important,
+                    completed,
                 }))
             ),
         });

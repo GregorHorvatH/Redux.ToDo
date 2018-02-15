@@ -2,14 +2,6 @@
 import types from './types';
 
 export default Object.freeze({
-    // fillTodos: (todos) => ({
-    //     type:    types.FILL_TODOS,
-    //     payload: todos,
-    // }),
-    // clearTodos: () => ({
-    //     type: types.CLEAR_TODOS,
-    // }),
-
     fetchTodos: (options) => ({
         type:    types.FETCH_TODOS,
         payload: options,

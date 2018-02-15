@@ -8,11 +8,15 @@ import { api, token } from '../../../../instruments/api';
 import todosActions from '../../../../actions/todos';
 // import { post as postSchema } from '../../../../schemas';
 
-export function* fetchTodosWorker () {
+export function* fetchTodosWorker ({ payload: options }) {
     try {
         yield put(uiActions.startTodosFetching());
 
-        const response = yield call(fetch, `${api}`, {
+        const { search } = options;
+
+        const searchOption = search ? `?search=${search}` : '';
+
+        const response = yield call(fetch, `${api}${searchOption}`, {
             method:  'GET',
             headers: {
                 'Authorization': token,

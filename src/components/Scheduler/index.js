@@ -13,10 +13,15 @@ import Task from '../../components/Task';
 
 class Scheduler extends Component {
 
+    state = {
+        search: '',
+    }
+
     componentDidMount () {
         const { fetchTodos } = this.props.actions;
+        const { search } = this.state;
 
-        fetchTodos();
+        fetchTodos({ search });
         this.input.focus();
     }
 
@@ -44,9 +49,25 @@ class Scheduler extends Component {
         const { completeAll } = this.props.actions;
 
         completeAll();
-    };
+    }
+
+    _handleSearchInputChange = (event) => {
+        const search = event.target.value || '';
+
+        this.setState({ search });
+    }
+
+    _handleSearchInputKeyPress = (event) => {
+        const { search } = this.state;
+        const { fetchTodos } = this.props.actions;
+
+        if (event.key === 'Enter') {
+            fetchTodos({ search });
+        }
+    }
 
     render () {
+        const { search } = this.state;
         const { todos } = this.props;
         const { deleteTodo, updateTodo } = this.props.actions;
         const allCompleted = todos.every((todo) => todo.completed);
@@ -69,7 +90,13 @@ class Scheduler extends Component {
                 <main>
                     <header>
                         <h1>Планировщик задач</h1>
-                        <input placeholder = 'Поиск' type = 'search' />
+                        <input
+                            placeholder = 'Поиск'
+                            type = 'search'
+                            value = { search }
+                            onChange = { this._handleSearchInputChange }
+                            onKeyPress = { this._handleSearchInputKeyPress }
+                        />
                     </header>
                     <section>
                         <form onSubmit = { this._handleSubmit }>

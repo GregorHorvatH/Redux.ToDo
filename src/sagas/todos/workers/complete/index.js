@@ -14,8 +14,8 @@ export function* completeWorker ({ payload: id }) {
 
         const todos = yield select(
             (store) => store.todos.filter(
-                (todo) => todo.id === id
-            )
+                (todo) => todo.get('id') === id
+            ).toJS()
         );
 
         const response = yield call(fetch, `${api}`, {

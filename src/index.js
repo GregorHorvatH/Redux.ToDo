@@ -12,9 +12,9 @@ import { saveState } from './helpers';
 import App from './containers/App';
 
 store.subscribe(() => {
-    saveState({
-        todos: store.getState().todos,
-    });
+    const todos = store.getState().todos;
+
+    saveState(todos);
 });
 
 render(

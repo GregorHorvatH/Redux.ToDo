@@ -12,7 +12,7 @@ export function* completeAllWorker () {
     try {
         yield put(uiActions.startTodosFetching());
 
-        const todos = yield select((store) => store.todos);
+        const todos = yield select((store) => store.todos.toJS());
 
         const completed = yield Boolean(todos.find((todo) => !todo.completed));
 

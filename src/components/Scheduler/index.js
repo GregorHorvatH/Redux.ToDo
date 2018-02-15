@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+// import { toJS } from 'immutable';
 
 // Instruments
 import Styles from './styles';
@@ -103,19 +104,23 @@ class Scheduler extends Component {
         const { todos } = this.props;
         const { deleteTodo, updateTodo } = this.props.actions;
         const allCompleted = todos.every((todo) => todo.completed);
-        const todoList = todos.map(({ id, message, completed, important }) => (
-            <Task
-                changePriority = { this._changePriority }
-                complete = { this._complete }
-                completed = { completed }
-                deleteTodo = { deleteTodo }
-                id = { id }
-                important = { important }
-                key = { id }
-                message = { message }
-                updateTodo = { updateTodo }
-            />
-        ));
+        const todoList = todos.map((todo) => {
+            const { id, message, completed, important } = todo.toJS();
+
+            return (
+                <Task
+                    changePriority = { this._changePriority }
+                    complete = { this._complete }
+                    completed = { completed }
+                    deleteTodo = { deleteTodo }
+                    id = { id }
+                    important = { important }
+                    key = { id }
+                    message = { message }
+                    updateTodo = { updateTodo }
+                />
+            );
+        });
 
         return (
             <section className = { Styles.scheduler }>

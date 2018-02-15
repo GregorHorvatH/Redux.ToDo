@@ -14,8 +14,8 @@ export function* updateTodoWorker ({ payload: newTodo }) {
 
         const todos = yield select(
             (store) => store.todos.filter(
-                (todo) => todo.id === newTodo.id
-            )
+                (todo) => todo.get('id') === newTodo.id
+            ).toJS()
         );
 
         const response = yield call(fetch, `${api}`, {

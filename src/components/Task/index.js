@@ -8,6 +8,7 @@ import Checkbox from '../../theme/assets/Checkbox';
 import Delete from '../../theme/assets/Delete';
 import Edit from '../../theme/assets/Edit';
 import Star from '../../theme/assets/Star';
+import { todoMaxLength } from '../../instruments/api';
 
 export default class Task extends Component {
 
@@ -22,6 +23,11 @@ export default class Task extends Component {
 
     _complete = () => {
         const { id, complete } = this.props;
+        const { isEditing } = this.state;
+
+        if (isEditing) {
+            return;
+        }
 
         complete(id);
     }
@@ -37,6 +43,10 @@ export default class Task extends Component {
         const { id, updateTodo } = this.props;
         const pos = newTodo.length || 0;
 
+        if (!newTodo.trim()) {
+            return;
+        }
+
         if (!isEditing) {
             // workaround для работы фокуса и изменения
             // позиции курсора в разных браузерах
@@ -50,7 +60,6 @@ export default class Task extends Component {
                 message: newTodo,
             });
         }
-
         this.setState({ isEditing: !isEditing });
     }
 
@@ -63,7 +72,9 @@ export default class Task extends Component {
     _handleInputChange = (event) => {
         const newTodo = event.target.value || '';
 
-        this.setState({ newTodo });
+        if (newTodo.length <= todoMaxLength) {
+            this.setState({ newTodo });
+        }
     }
 
     _handleDeleteClick = () => {

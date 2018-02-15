@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import Styles from './styles';
 import Checkbox from 'theme/assets/Checkbox';
 import todosActions from '../../actions/todos';
+import { todoMaxLength } from '../../instruments/api';
 
 // Components
 import Task from '../../components/Task';
@@ -17,7 +18,8 @@ class Scheduler extends Component {
         super(props);
 
         this.state = {
-            search: '',
+            newTodo: '',
+            search:  '',
         };
 
         window.onresize = () => {
@@ -43,12 +45,24 @@ class Scheduler extends Component {
         }
     }
 
-    _handleSubmit = (event) => {
-        const { createTodo } = this.props.actions;
+    _handleInputChange = (event) => {
+        const newTodo = event.target.value || '';
 
+        if (newTodo.length <= todoMaxLength) {
+            this.setState({ newTodo });
+        }
+    }
+
+    _handleSubmit = (event) => {
         event.preventDefault();
-        createTodo(this.input.value);
-        this.input.value = '';
+
+        const { createTodo } = this.props.actions;
+        const { newTodo } = this.state;
+
+        if (newTodo.trim()) {
+            createTodo(newTodo);
+            this.setState({ newTodo: '' });
+        }
     }
 
     _complete = (id) => {
@@ -85,7 +99,7 @@ class Scheduler extends Component {
     }
 
     render () {
-        const { search } = this.state;
+        const { search, newTodo } = this.state;
         const { todos } = this.props;
         const { deleteTodo, updateTodo } = this.props.actions;
         const allCompleted = todos.every((todo) => todo.completed);
@@ -122,6 +136,8 @@ class Scheduler extends Component {
                                 placeholder = 'Описание моей новой задачи'
                                 ref = { (ref) => this.input = ref }
                                 type = 'text'
+                                value = { newTodo }
+                                onChange = { this._handleInputChange }
                             />
                             <button>Добавить задачу</button>
                         </form>

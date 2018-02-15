@@ -1,47 +1,55 @@
 // Core
-// import { call, put, select } from 'redux-saga/effects';
+import { put, call, select } from 'redux-saga/effects';
 // import { normalize } from 'normalizr';
 
 // Instruments
-// import todosActions from '../../../../actions/todos';
-// import uiActions from '../../../../actions/ui';
-// import { api } from '../../../../instruments/api';
+import uiActions from '../../../../actions/ui';
+import { api, token } from '../../../../instruments/api';
+import todosActions from '../../../../actions/todos';
 // import { post as postSchema } from '../../../../schemas';
 
-export function* updateTodoWorker ({ payload: todo }) {
+export function* updateTodoWorker ({ payload: newTodo }) {
     try {
-        yield console.log('update todo', todo);
-        // yield put(uiActions.startFeedFetching());
+        yield put(uiActions.startTodosFetching());
 
-        // const token = yield select((state) => state.profile.token);
+        const todos = yield select(
+            (store) => store.todos.filter(
+                (todo) => todo.id === newTodo.id
+            )
+        );
 
-        // const response = yield call(fetch, `${api}/feed`, {
-        //     method:  'POST',
-        //     headers: {
-        //         'Authorization': token,
-        //         'Content-Type':  'application/json',
-        //     },
-        //     body: JSON.stringify({ comment }),
-        // });
+        const response = yield call(fetch, `${api}`, {
+            method:  'PUT',
+            headers: {
+                'Authorization': token,
+                'Content-Type':  'application/json',
+            },
+            body: JSON.stringify(
+                todos.map((todo) => ({
+                    ...todo,
+                    todo:      newTodo.message,
+                    favorites: todo.important,
+                    completed: todo.completed,
+                }))
+            ),
+        });
 
-        // const { data: denormalizedPost, message } = yield call([response, response.json]);
+        const { data: newTodos, message } = yield call([response, response.json]);
 
-        // if (response.status !== 200) {
-        //     if (response.status === 401) {
-        //         localStorage.removeItem('token');
-        //     }
+        if (response.status !== 200) {
+            throw new Error(message);
+        }
 
-        //     throw new Error(message);
-        // }
-
-        // const normalizedPosts = normalize(denormalizedPost, postSchema);
-
-        // yield put(postsActions.createPostSuccess(normalizedPosts));
+        yield put(todosActions.updateTodoSuccess(
+            newTodos.map((todo) => ({
+                ...todo,
+                message:   todo.todo,
+                important: todo.favorites,
+            }))
+        ));
     } catch (error) {
-        console.log('error', error);
-        // yield put(postsActions.createPostFail(error.message));
+        yield put(todosActions.updateTodoFail(error.message));
     } finally {
-        console.log('finally');
-        // yield put(uiActions.stopFeedFetching());
+        yield put(uiActions.stopTodosFetching());
     }
 }

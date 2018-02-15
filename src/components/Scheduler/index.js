@@ -48,7 +48,7 @@ class Scheduler extends Component {
 
     render () {
         const { todos } = this.props;
-        const { deleteTodo } = this.props.actions;
+        const { deleteTodo, updateTodo } = this.props.actions;
         const allCompleted = todos.every((todo) => todo.completed);
         const todoList = todos.map(({ id, message, completed, important }) => (
             <Task
@@ -60,6 +60,7 @@ class Scheduler extends Component {
                 important = { important }
                 key = { id }
                 message = { message }
+                updateTodo = { updateTodo }
             />
         ));
 

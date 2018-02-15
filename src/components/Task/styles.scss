@@ -2,10 +2,11 @@
 
 .task {
     display: flex;
-    align-items: center;
+    flex: 1;
+    // align-items: center;
     justify-content: space-between;
     height: 6.1rem;
-    argin: 1.3rem 0 0;
+    margin: 1.3rem 0 0;
     margin-bottom: 1.3rem;
     padding: 1.8rem;
     letter-spacing: 0.1rem;
@@ -32,9 +33,29 @@
             margin-left: 1.7rem;
         }
     }
+
+    &:not([type='checkbox']) .input {
+        margin-top: -10px;
+        width: 100%;
+
+        &[disabled] {
+            border: none;
+        }
+    }    
 }
 
 .completed {
     background-color: $paletteColor8;
     color: $paletteColor9;
+}
+
+.inputWrapper {
+    display: flex;
+    flex: 1;
+}
+
+.editable {
+    border-bottom: 1px black solid;
+    // background-color: '#effff0';
+    flex: 1;
 }

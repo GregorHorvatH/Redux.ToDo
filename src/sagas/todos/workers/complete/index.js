@@ -28,7 +28,7 @@ export function* completeWorker ({ payload: id }) {
                 todos.map((todo) => ({
                     ...todo,
                     todo:      todo.message,
-                    favorites: !todo.important,
+                    favorites: todo.important,
                     completed: !todo.completed,
                 }))
             ),

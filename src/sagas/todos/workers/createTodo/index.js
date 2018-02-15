@@ -29,7 +29,9 @@ export function* createTodoWorker ({ payload: todo }) {
 
         yield put(todosActions.createTodoSuccess({
             ...newTodo,
-            message: newTodo.todo,
+            important: false,
+            completed: false,
+            message:   newTodo.todo,
         }));
     } catch (error) {
         yield put(todosActions.createTodoFail(error.message));

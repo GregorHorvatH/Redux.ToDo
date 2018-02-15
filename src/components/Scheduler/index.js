@@ -34,9 +34,7 @@ class Scheduler extends Component {
         this.input.focus();
     }
 
-    /**
-     * фикс изображения компонента на маленьком экране
-     */
+    // фикс изображения компонента на маленьком экране
     _setMainTopPosition = () => {
         if (window.innerHeight < this.main.offsetHeight) {
             this.main.className = Styles.fixed;

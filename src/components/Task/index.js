@@ -107,11 +107,15 @@ export default class Task extends Component {
                         color2 = '#000'
                         onClick = { this._changePriority }
                     />
-                    <Edit
-                        color1 = '#3B8EF3'
-                        color2 = '#000'
-                        onClick = { this._handleEditClick }
-                    />
+                    {
+                        completed
+                            ? null
+                            : <Edit
+                                color1 = '#3B8EF3'
+                                color2 = '#000'
+                                onClick = { this._handleEditClick }
+                            />
+                    }
                     <Delete
                         color1 = '#3B8EF3'
                         color2 = '#000'

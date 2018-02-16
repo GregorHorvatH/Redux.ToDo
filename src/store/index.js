@@ -8,6 +8,7 @@ import { fromJS } from 'immutable';
 import reducer from '../reducers';
 import { saga } from '../sagas';
 import { loadState } from '../helpers';
+import { saveState } from '../helpers';
 
 // Environment check
 const dev = process.env.NODE_ENV === 'development'; // eslint-disable-line
@@ -38,11 +39,19 @@ if (dev) {
     middleware.push(logger);
 }
 
-export { history };
-export default createStore(
+const store = createStore(
     reducer,
     { todos: persistedState },
     composeEnhancers(applyMiddleware(...middleware))
 );
+
+store.subscribe(() => {
+    const todos = store.getState().todos;
+
+    saveState(todos);
+});
+
+export { history };
+export default store;
 
 sagaMiddleware.run(saga);

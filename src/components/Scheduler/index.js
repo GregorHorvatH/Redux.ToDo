@@ -2,13 +2,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-// import { toJS } from 'immutable';
 
 // Instruments
 import Styles from './styles';
 import Checkbox from 'theme/assets/Checkbox';
 import todosActions from '../../actions/todos';
-import { todoMaxLength } from '../../instruments/api';
+import { todoMaxLength } from '../../instruments/config';
 
 // Components
 import Task from '../../components/Task';
@@ -103,7 +102,7 @@ class Scheduler extends Component {
         const { search, newTodo } = this.state;
         const { todos } = this.props;
         const { deleteTodo, updateTodo } = this.props.actions;
-        const allCompleted = todos.every((todo) => todo.completed);
+        const allCompleted = todos.every((todo) => todo.get('completed'));
         const todoList = todos.map((todo) => {
             const { id, message, completed, important } = todo.toJS();
 

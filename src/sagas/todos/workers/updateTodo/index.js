@@ -14,9 +14,14 @@ export function* updateTodoWorker ({ payload: newTodo }) {
 
         const todos = yield select(
             (store) => store.todos.filter(
-                (todo) => todo.get('id') === newTodo.id
+                (todo) => todo.get('id') === newTodo.id &&
+                    todo.get('message') !== newTodo.message
             ).toJS()
         );
+
+        if (!todos.length) {
+            throw new Error('Nothing to update');
+        }
 
         const response = yield call(fetch, `${api}`, {
             method:  'PUT',

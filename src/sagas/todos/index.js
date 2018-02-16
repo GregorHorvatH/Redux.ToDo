@@ -12,25 +12,25 @@ import { completeWorker } from './workers/complete';
 import { completeAllWorker } from './workers/completeAll';
 
 export default Object.freeze({
-    * fetchTodosWatcher () { // метод объекта генератор
+    * fetchTodosWatcher () {
         yield takeEvery(types.FETCH_TODOS, fetchTodosWorker);
     },
-    * createTodoWatcher () { // метод объекта генератор
+    * createTodoWatcher () {
         yield takeEvery(types.CREATE_TODO, createTodoWorker);
     },
-    * updateTodoWatcher () { // метод объекта генератор
+    * updateTodoWatcher () {
         yield takeEvery(types.UPDATE_TODO, updateTodoWorker);
     },
-    * deleteTodoWatcher () { // метод объекта генератор
+    * deleteTodoWatcher () {
         yield takeEvery(types.DELETE_TODO, deleteTodoWorker);
     },
-    * changePriorityWatcher () { // метод объекта генератор
+    * changePriorityWatcher () {
         yield takeEvery(types.CHANGE_PRIORITY, changePriorityWorker);
     },
-    * completeWatcher () { // метод объекта генератор
+    * completeWatcher () {
         yield takeEvery(types.COMPLETE, completeWorker);
     },
-    * completeAllWatcher () { // метод объекта генератор
+    * completeAllWatcher () {
         yield takeEvery(types.COMPLETE_ALL, completeAllWorker);
     },
 });

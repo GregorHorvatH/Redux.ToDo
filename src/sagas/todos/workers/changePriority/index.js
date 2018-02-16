@@ -27,8 +27,7 @@ export function* changePriorityWorker ({ payload: id }) {
             body: JSON.stringify(
                 todos.map((todo) => ({
                     ...todo,
-                    todo:      todo.message,
-                    favorites: !todo.important,
+                    favorite: !todo.important,
                 }))
             ),
         });
@@ -42,8 +41,7 @@ export function* changePriorityWorker ({ payload: id }) {
         yield put(todosActions.updateTodoSuccess(
             newTodos.map((todo) => ({
                 ...todo,
-                message:   todo.todo,
-                important: todo.favorites,
+                important: todo.favorite,
             }))
         ));
     } catch (error) {

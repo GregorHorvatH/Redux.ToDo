@@ -27,9 +27,8 @@ export function* updateTodoWorker ({ payload: newTodo }) {
             body: JSON.stringify(
                 todos.map((todo) => ({
                     ...todo,
-                    todo:      newTodo.message,
-                    favorites: todo.important,
-                    completed: todo.completed,
+                    message:  newTodo.message,
+                    favorite: todo.important,
                 }))
             ),
         });
@@ -43,8 +42,7 @@ export function* updateTodoWorker ({ payload: newTodo }) {
         yield put(todosActions.updateTodoSuccess(
             newTodos.map((todo) => ({
                 ...todo,
-                message:   todo.todo,
-                important: todo.favorites,
+                important: todo.favorite,
             }))
         ));
     } catch (error) {

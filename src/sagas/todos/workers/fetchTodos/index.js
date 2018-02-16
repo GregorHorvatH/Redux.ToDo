@@ -32,8 +32,7 @@ export function* fetchTodosWorker ({ payload: options }) {
         yield put(todosActions.fetchTodosSuccess(
             todos.map((todo) => ({
                 ...todo,
-                message:   todo.todo,
-                important: todo.favorites,
+                important: todo.favorite,
             }))
         ));
     } catch (error) {

@@ -8,11 +8,11 @@ import { api, token } from '../../../../instruments/api';
 import todosActions from '../../../../actions/todos';
 // import { post as postSchema } from '../../../../schemas';
 
-export function* deleteTodoWorker ({ payload: postId }) {
+export function* deleteTodoWorker ({ payload: todoId }) {
     try {
         yield put(uiActions.startTodosFetching());
 
-        const response = yield call(fetch, `${api}/${postId}`, {
+        const response = yield call(fetch, `${api}/${todoId}`, {
             method:  'DELETE',
             headers: {
                 'Authorization': token,
@@ -25,7 +25,7 @@ export function* deleteTodoWorker ({ payload: postId }) {
             throw new Error(message);
         }
 
-        yield put(todosActions.deleteTodoSuccess(postId));
+        yield put(todosActions.deleteTodoSuccess(todoId));
     } catch (error) {
         yield put(todosActions.deleteTodoFail(error.message));
     } finally {

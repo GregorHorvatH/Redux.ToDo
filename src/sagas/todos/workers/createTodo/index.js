@@ -8,7 +8,7 @@ import { api, token } from '../../../../instruments/api';
 import todosActions from '../../../../actions/todos';
 // import { post as postSchema } from '../../../../schemas';
 
-export function* createTodoWorker ({ payload: todo }) {
+export function* createTodoWorker ({ payload }) {
     try {
         yield put(uiActions.startTodosFetching());
 
@@ -18,7 +18,7 @@ export function* createTodoWorker ({ payload: todo }) {
                 'Authorization': token,
                 'Content-Type':  'application/json',
             },
-            body: JSON.stringify({ todo }),
+            body: JSON.stringify({ message: payload }),
         });
 
         const { data: newTodo, message } = yield call([response, response.json]);
@@ -31,7 +31,6 @@ export function* createTodoWorker ({ payload: todo }) {
             ...newTodo,
             important: false,
             completed: false,
-            message:   newTodo.todo,
         }));
     } catch (error) {
         yield put(todosActions.createTodoFail(error.message));

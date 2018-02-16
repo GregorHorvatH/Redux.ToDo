@@ -7,11 +7,11 @@ import types from '../../actions/todos/types';
 const initialState = List([]);
 
 const favoritesFirst = (todo1, todo2) => {
-    if (todo1.get('favorites') && !todo2.get('favorites')) {
+    if (todo1.get('favorite') && !todo2.get('favorite')) {
         return -1;
     }
 
-    if (!todo1.get('favorites') && todo2.get('favorites')) {
+    if (!todo1.get('favorite') && todo2.get('favorite')) {
         return 1;
     }
 
@@ -43,12 +43,13 @@ export default (state = initialState, action) => {
                 .sort(completeLast);
 
         case types.UPDATE_TODO_SUCCESS:
-            return state.map((item1) => fromJS({
-                ...item1.toJS(),
-                ...action.payload.find(
+            return state.map((item1) => {
+                const newItem = action.payload.find(
                     (item2) => item2.id === item1.get('id')
-                ),
-            }))
+                );
+
+                return newItem ? fromJS(newItem) : item1;
+            })
                 .sort(favoritesFirst)
                 .sort(completeLast);
 

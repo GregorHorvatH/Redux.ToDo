@@ -122,7 +122,7 @@ export default class Task extends Component {
                         completed
                             ? null
                             : <Edit
-                                color1 = { isEditing ? '#000' : '#3B8EF3' }
+                                color1 = { isEditing ? '#71ADF7' : '#3B8EF3' }
                                 color2 = { isEditing ? '#3B8EF3' : '#000' }
                                 onClick = { this._handleEditClick }
                             />

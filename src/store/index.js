@@ -33,7 +33,11 @@ const logger = createLogger({
     },
 });
 
-const persistedState = fromJS(loadState());
+const { entities, result } = loadState();
+const persistedStore = {
+    entities: fromJS(entities),
+    result:   fromJS(result),
+};
 
 if (dev) {
     middleware.push(logger);
@@ -41,7 +45,7 @@ if (dev) {
 
 const store = createStore(
     reducer,
-    { todos: persistedState },
+    { todos: persistedStore },
     composeEnhancers(applyMiddleware(...middleware))
 );
 
@@ -55,3 +59,5 @@ export { history };
 export default store;
 
 sagaMiddleware.run(saga);
+
+window.x = store;

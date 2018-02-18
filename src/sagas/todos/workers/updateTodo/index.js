@@ -4,7 +4,8 @@ import { put, call, select } from 'redux-saga/effects';
 
 // Instruments
 import uiActions from '../../../../actions/ui';
-import { api, token } from '../../../../instruments/api';
+import { api } from '../../../../instruments/api';
+import { token } from '../../../../instruments/secret';
 import todosActions from '../../../../actions/todos';
 // import { post as postSchema } from '../../../../schemas';
 
@@ -12,12 +13,11 @@ export function* updateTodoWorker ({ payload: newTodo }) {
     try {
         yield put(uiActions.startTodosFetching());
 
-        const todos = yield select(
-            (store) => store.todos.filter(
-                (todo) => todo.get('id') === newTodo.id &&
-                    todo.get('message') !== newTodo.message
-            ).toJS()
+        const oldTodo = yield select(
+            (store) => store.todos.entities.get('todo').get(newTodo.id).toJS()
         );
+
+        const todos = [oldTodo];
 
         if (!todos.length) {
             throw new Error('Nothing to update');

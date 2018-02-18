@@ -1,12 +1,13 @@
 // Core
 import { put, call } from 'redux-saga/effects';
-// import { normalize } from 'normalizr';
+import { normalize } from 'normalizr';
 
 // Instruments
 import uiActions from '../../../../actions/ui';
-import { api, token } from '../../../../instruments/api';
+import { api } from '../../../../instruments/api';
+import { token } from '../../../../instruments/secret';
 import todosActions from '../../../../actions/todos';
-// import { post as postSchema } from '../../../../schemas';
+import { todos as todosSchema } from '../../../../schemas';
 
 export function* fetchTodosWorker ({ payload: options }) {
     try {
@@ -28,13 +29,9 @@ export function* fetchTodosWorker ({ payload: options }) {
         if (response.status !== 200) {
             throw new Error(message);
         }
+        const normalizedTodos = normalize(todos, todosSchema);
 
-        yield put(todosActions.fetchTodosSuccess(
-            todos.map((todo) => ({
-                ...todo,
-                important: todo.favorite,
-            }))
-        ));
+        yield put(todosActions.fetchTodosSuccess(normalizedTodos));
     } catch (error) {
         yield put(todosActions.fetchTodosFail(error.message));
     } finally {

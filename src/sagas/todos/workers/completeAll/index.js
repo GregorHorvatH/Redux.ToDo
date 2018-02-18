@@ -4,7 +4,8 @@ import { put, call, select } from 'redux-saga/effects';
 
 // Instruments
 import uiActions from '../../../../actions/ui';
-import { api, token } from '../../../../instruments/api';
+import { api } from '../../../../instruments/api';
+import { token } from '../../../../instruments/secret';
 import todosActions from '../../../../actions/todos';
 // import { post as postSchema } from '../../../../schemas';
 

@@ -12,6 +12,9 @@ import { todoMaxLength } from '../../instruments/config';
 // Components
 import Task from '../../components/Task';
 
+// Selectors
+import { getTodos } from '../../selectors/todos';
+
 class Scheduler extends Component {
 
     constructor (props) {
@@ -102,9 +105,9 @@ class Scheduler extends Component {
         const { search, newTodo } = this.state;
         const { todos } = this.props;
         const { deleteTodo, updateTodo } = this.props.actions;
-        const allCompleted = todos.every((todo) => todo.get('completed'));
+        const allCompleted = todos.every((todo) => todo.completed);
         const todoList = todos.map((todo) => {
-            const { id, message, completed, important } = todo.toJS();
+            const { id, message, completed, important } = todo;
 
             return (
                 <Task
@@ -162,8 +165,8 @@ class Scheduler extends Component {
     }
 }
 
-const mapStateToProps = ({ todos }) => ({
-    todos,
+const mapStateToProps = (state) => ({
+    todos: getTodos(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

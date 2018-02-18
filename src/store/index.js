@@ -9,6 +9,8 @@ import reducer from '../reducers';
 import { saga } from '../sagas';
 import { loadState } from '../helpers';
 import { saveState } from '../helpers';
+import types from '../actions/todos/types';
+import { sortFavoritesFirst, sortCompleteLast } from '../helpers';
 
 // Environment check
 const dev = process.env.NODE_ENV === 'development'; // eslint-disable-line
@@ -33,16 +35,6 @@ const logger = createLogger({
     },
 });
 
-const stateSkipper = (store) => (next) => (action) => {
-    next({
-        ...action,
-        meta: {
-            ...action.meta,
-            state: store.getState(),
-        },
-    });
-};
-
 const { entities, result } = loadState();
 const persistedStore = {
     entities: fromJS(entities),
@@ -51,7 +43,6 @@ const persistedStore = {
 
 if (dev) {
     middleware.push(logger);
-    middleware.push(stateSkipper);
 }
 
 const store = createStore(
@@ -64,6 +55,27 @@ store.subscribe(() => {
     const todos = store.getState().todos;
 
     saveState(todos);
+});
+
+store.subscribe(() => {
+    const state = store.getState();
+    const { lastAction, todos } = state;
+    const actionTypes = [
+        types.FETCH_TODOS_SUCCESS,
+        types.UPDATE_TODO_SUCCESS,
+        types.CREATE_TODO_SUCCESS
+    ];
+
+    if (actionTypes.indexOf(lastAction.type) > -1) {
+        const sortedResult = todos.result.map(
+            (item) => todos.entities.get(item)
+        )
+            .sort(sortFavoritesFirst)
+            .sort(sortCompleteLast)
+            .map((item) => item.get('id'));
+
+        todos.result = sortedResult;
+    }
 });
 
 export { history };

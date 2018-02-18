@@ -26,3 +26,27 @@ export const saveState = (state) => {
         // Ignore write errors
     }
 };
+
+export const sortFavoritesFirst = (todo1, todo2) => {
+    if (todo1.get('favorite') && !todo2.get('favorite')) {
+        return -1;
+    }
+
+    if (!todo1.get('favorite') && todo2.get('favorite')) {
+        return 1;
+    }
+
+    return 0;
+};
+
+export const sortCompleteLast = (todo1, todo2) => {
+    if (todo1.get('completed') && !todo2.get('completed')) {
+        return 1;
+    }
+
+    if (!todo1.get('completed') && todo2.get('completed')) {
+        return -1;
+    }
+
+    return 0;
+};

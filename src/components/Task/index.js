@@ -8,7 +8,7 @@ import Checkbox from '../../theme/assets/Checkbox';
 import Delete from '../../theme/assets/Delete';
 import Edit from '../../theme/assets/Edit';
 import Star from '../../theme/assets/Star';
-import { todoMaxLength } from '../../instruments/api';
+import { todoMaxLength } from '../../instruments/config';
 
 export default class Task extends Component {
 
@@ -122,8 +122,8 @@ export default class Task extends Component {
                         completed
                             ? null
                             : <Edit
-                                color1 = '#3B8EF3'
-                                color2 = '#000'
+                                color1 = { isEditing ? '#71ADF7' : '#3B8EF3' }
+                                color2 = { isEditing ? '#3B8EF3' : '#000' }
                                 onClick = { this._handleEditClick }
                             />
                     }

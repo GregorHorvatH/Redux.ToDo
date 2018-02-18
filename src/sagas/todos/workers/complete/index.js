@@ -4,7 +4,8 @@ import { put, call, select } from 'redux-saga/effects';
 
 // Instruments
 import uiActions from '../../../../actions/ui';
-import { api, token } from '../../../../instruments/api';
+import { api } from '../../../../instruments/api';
+import { token } from '../../../../instruments/secret';
 import todosActions from '../../../../actions/todos';
 // import { post as postSchema } from '../../../../schemas';
 
@@ -14,8 +15,8 @@ export function* completeWorker ({ payload: id }) {
 
         const todos = yield select(
             (store) => store.todos.filter(
-                (todo) => todo.id === id
-            )
+                (todo) => todo.get('id') === id
+            ).toJS()
         );
 
         const response = yield call(fetch, `${api}`, {
@@ -27,8 +28,7 @@ export function* completeWorker ({ payload: id }) {
             body: JSON.stringify(
                 todos.map((todo) => ({
                     ...todo,
-                    todo:      todo.message,
-                    favorites: todo.important,
+                    favorite:  todo.important,
                     completed: !todo.completed,
                 }))
             ),
@@ -43,8 +43,7 @@ export function* completeWorker ({ payload: id }) {
         yield put(todosActions.updateTodoSuccess(
             newTodos.map((todo) => ({
                 ...todo,
-                message:   todo.todo,
-                important: todo.favorites,
+                important: todo.favorite,
             }))
         ));
     } catch (error) {

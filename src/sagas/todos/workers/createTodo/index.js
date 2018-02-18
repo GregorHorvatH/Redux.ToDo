@@ -1,14 +1,15 @@
 // Core
 import { put, call } from 'redux-saga/effects';
-// import { normalize } from 'normalizr';
+import { normalize } from 'normalizr';
 
 // Instruments
 import uiActions from '../../../../actions/ui';
-import { api, token } from '../../../../instruments/api';
+import { api } from '../../../../instruments/api';
+import { token } from '../../../../instruments/secret';
 import todosActions from '../../../../actions/todos';
-// import { post as postSchema } from '../../../../schemas';
+import { todo as todoSchema } from '../../../../schemas';
 
-export function* createTodoWorker ({ payload: todo }) {
+export function* createTodoWorker ({ payload }) {
     try {
         yield put(uiActions.startTodosFetching());
 
@@ -18,7 +19,7 @@ export function* createTodoWorker ({ payload: todo }) {
                 'Authorization': token,
                 'Content-Type':  'application/json',
             },
-            body: JSON.stringify({ todo }),
+            body: JSON.stringify({ message: payload }),
         });
 
         const { data: newTodo, message } = yield call([response, response.json]);
@@ -27,12 +28,13 @@ export function* createTodoWorker ({ payload: todo }) {
             throw new Error(message);
         }
 
-        yield put(todosActions.createTodoSuccess({
+        const normalizedTodos = normalize({
             ...newTodo,
             important: false,
             completed: false,
-            message:   newTodo.todo,
-        }));
+        }, todoSchema);
+
+        yield put(todosActions.createTodoSuccess(normalizedTodos));
     } catch (error) {
         yield put(todosActions.createTodoFail(error.message));
     } finally {

@@ -2,11 +2,13 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { createLogger } from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
+import { fromJS } from 'immutable';
 
 // Instruments
 import reducer from '../reducers';
 import { saga } from '../sagas';
 import { loadState } from '../helpers';
+import { saveState } from '../helpers';
 
 // Environment check
 const dev = process.env.NODE_ENV === 'development'; // eslint-disable-line
@@ -31,13 +33,31 @@ const logger = createLogger({
     },
 });
 
-const persistedState = loadState();
+const { entities, result } = loadState();
+const persistedStore = {
+    entities: fromJS(entities),
+    result:   fromJS(result),
+};
 
 if (dev) {
     middleware.push(logger);
 }
 
+const store = createStore(
+    reducer,
+    { todos: persistedStore },
+    composeEnhancers(applyMiddleware(...middleware))
+);
+
+store.subscribe(() => {
+    const todos = store.getState().todos;
+
+    saveState(todos);
+});
+
 export { history };
-export default createStore(reducer, persistedState, composeEnhancers(applyMiddleware(...middleware)));
+export default store;
 
 sagaMiddleware.run(saga);
+
+window.x = store;

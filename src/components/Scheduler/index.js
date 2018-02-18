@@ -7,10 +7,13 @@ import { bindActionCreators } from 'redux';
 import Styles from './styles';
 import Checkbox from 'theme/assets/Checkbox';
 import todosActions from '../../actions/todos';
-import { todoMaxLength } from '../../instruments/api';
+import { todoMaxLength } from '../../instruments/config';
 
 // Components
 import Task from '../../components/Task';
+
+// Selectors
+import { getTodos } from '../../selectors/todos';
 
 class Scheduler extends Component {
 
@@ -103,19 +106,23 @@ class Scheduler extends Component {
         const { todos } = this.props;
         const { deleteTodo, updateTodo } = this.props.actions;
         const allCompleted = todos.every((todo) => todo.completed);
-        const todoList = todos.map(({ id, message, completed, important }) => (
-            <Task
-                changePriority = { this._changePriority }
-                complete = { this._complete }
-                completed = { completed }
-                deleteTodo = { deleteTodo }
-                id = { id }
-                important = { important }
-                key = { id }
-                message = { message }
-                updateTodo = { updateTodo }
-            />
-        ));
+        const todoList = todos.map((todo) => {
+            const { id, message, completed, important } = todo;
+
+            return (
+                <Task
+                    changePriority = { this._changePriority }
+                    complete = { this._complete }
+                    completed = { completed }
+                    deleteTodo = { deleteTodo }
+                    id = { id }
+                    important = { important }
+                    key = { id }
+                    message = { message }
+                    updateTodo = { updateTodo }
+                />
+            );
+        });
 
         return (
             <section className = { Styles.scheduler }>
@@ -158,8 +165,8 @@ class Scheduler extends Component {
     }
 }
 
-const mapStateToProps = ({ todos }) => ({
-    todos,
+const mapStateToProps = (state) => ({
+    todos: getTodos(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

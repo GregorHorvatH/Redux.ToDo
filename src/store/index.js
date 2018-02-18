@@ -33,6 +33,16 @@ const logger = createLogger({
     },
 });
 
+const stateSkipper = (store) => (next) => (action) => {
+    next({
+        ...action,
+        meta: {
+            ...action.meta,
+            state: store.getState(),
+        },
+    });
+};
+
 const { entities, result } = loadState();
 const persistedStore = {
     entities: fromJS(entities),
@@ -41,6 +51,7 @@ const persistedStore = {
 
 if (dev) {
     middleware.push(logger);
+    middleware.push(stateSkipper);
 }
 
 const store = createStore(

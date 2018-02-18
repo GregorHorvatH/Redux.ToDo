@@ -31,6 +31,14 @@ const completeLast = (todo1, todo2) => {
 const initialState = List([]);
 
 export default (state = initialState, action) => {
+    // const newTodos = action && action.payload && action.payload.entities && action.payload.entities.todo
+    //     ? action.payload.entities.todo
+    //     : initialState;
+
+    // const allTodos = action && action.meta && action.meta.state && action.meta.state.todos
+    //     ? action.meta.state.todos.entities.merge(newTodos)
+    //     : initialState;
+
     switch (action.type) {
         case types.FETCH_TODOS_SUCCESS:
             return fromJS(
@@ -43,7 +51,17 @@ export default (state = initialState, action) => {
 
         case types.CREATE_TODO_SUCCESS:
             return state.unshift(fromJS(action.payload.result));
-            // TODO: sort
+            // const unshifted = state.unshift(fromJS(action.payload.result));
+
+            // debugger;
+            // return fromJS(
+            //         unshifted
+            //         .map((item) => allTodos.get(item).toJS())
+            //         .sort(favoritesFirst)
+            //         .sort(completeLast)
+            //         .map((item) => item.id)
+            // );
+        // TODO: sort
 
         case types.DELETE_TODO_SUCCESS:
             return state.filter((item) => item !== action.payload);

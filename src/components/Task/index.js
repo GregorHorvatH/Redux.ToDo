@@ -69,6 +69,10 @@ export default class Task extends Component {
         }
     }
 
+    _handleInputBlur = () => {
+        this._handleEditClick();
+    }
+
     _handleInputChange = (event) => {
         const newTodo = event.target.value || '';
 
@@ -107,6 +111,7 @@ export default class Task extends Component {
                         ref = { (ref) => this.input = ref }
                         type = 'text'
                         value = { newTodo }
+                        onBlur = { this._handleInputBlur }
                         onChange = { this._handleInputChange }
                         onKeyPress = { this._handleInputKeyPress }
                     />

@@ -17,6 +17,10 @@ export function* updateTodoWorker ({ payload: newTodo }) {
             (store) => store.todos.entities.get(newTodo.id).toJS()
         );
 
+        if (oldTodo.message === newTodo.message) {
+            throw new Error('Nothing to update!');
+        }
+
         const response = yield call(fetch, `${api}`, {
             method:  'PUT',
             headers: {

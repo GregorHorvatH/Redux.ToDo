@@ -1,19 +1,27 @@
 // Core
 import { put, call, select } from 'redux-saga/effects';
-// import { normalize } from 'normalizr';
+import { normalize } from 'normalizr';
 
 // Instruments
 import uiActions from '../../../../actions/ui';
 import { api } from '../../../../instruments/api';
 import { token } from '../../../../instruments/secret';
 import todosActions from '../../../../actions/todos';
-// import { post as postSchema } from '../../../../schemas';
+import { todos as todosSchema } from '../../../../schemas';
 
 export function* completeAllWorker () {
     try {
         yield put(uiActions.startTodosFetching());
 
-        const todos = yield select((store) => store.todos.toJS());
+        const todos = yield select(
+            (store) => store.todos.result.map(
+                (item) => store.todos.entities.get(item).toJS()
+            )
+        );
+
+        if (!todos.size) {
+            throw new Error('Nothing to update');
+        }
 
         const completed = yield Boolean(todos.find((todo) => !todo.completed));
 
@@ -26,7 +34,6 @@ export function* completeAllWorker () {
             body: JSON.stringify(
                 todos.map((todo) => ({
                     ...todo,
-                    favorite: todo.important,
                     completed,
                 }))
             ),
@@ -37,13 +44,9 @@ export function* completeAllWorker () {
         if (response.status !== 200) {
             throw new Error(message);
         }
+        const normalizedTodos = normalize(newTodos, todosSchema);
 
-        yield put(todosActions.updateTodoSuccess(
-            newTodos.map((todo) => ({
-                ...todo,
-                important: todo.favorite,
-            }))
-        ));
+        yield put(todosActions.updateTodoSuccess(normalizedTodos));
     } catch (error) {
         yield put(todosActions.updateTodoFail(error.message));
     } finally {

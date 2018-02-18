@@ -124,6 +124,8 @@ class Scheduler extends Component {
             );
         });
 
+        // debugger;
+
         return (
             <section className = { Styles.scheduler }>
                 <main ref = { (ref) => this.main = ref }>

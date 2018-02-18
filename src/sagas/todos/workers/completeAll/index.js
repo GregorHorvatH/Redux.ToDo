@@ -23,7 +23,7 @@ export function* completeAllWorker () {
             throw new Error('Nothing to update');
         }
 
-        const completed = yield Boolean(todos.find((todo) => !todo.completed));
+        const allCompleted = todos.every((todo) => todo.completed);
 
         const response = yield call(fetch, `${api}`, {
             method:  'PUT',
@@ -34,7 +34,7 @@ export function* completeAllWorker () {
             body: JSON.stringify(
                 todos.map((todo) => ({
                     ...todo,
-                    completed,
+                    completed: !allCompleted,
                 }))
             ),
         });

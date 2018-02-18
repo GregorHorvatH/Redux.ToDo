@@ -18,5 +18,6 @@ export const getTodos = createSelector(
                 important: todo.get('favorite'),
             };
         }
-    ).toJS(),
+    )
+        .toJS(),
 );

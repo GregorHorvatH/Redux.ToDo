@@ -12,9 +12,12 @@ export default (state = initialState, action) => {
             return fromJS(action.payload.result);
 
         case types.CREATE_TODO_SUCCESS:
-            debugger;
+            return state.unshift(fromJS(action.payload.result));
 
-            return state.insert(fromJS(action.payload.result));
+        case types.DELETE_TODO_SUCCESS:
+            return state.filter(
+                (item) => item !== action.payload
+            );
 
         case types.UPDATE_TODO_SUCCESS:
             return state.map((item1) => {
@@ -24,11 +27,6 @@ export default (state = initialState, action) => {
 
                 return newItem ? fromJS(newItem) : item1;
             });
-            // .sort(favoritesFirst)
-            // .sort(completeLast);
-
-        case types.DELETE_TODO_SUCCESS:
-            return state.shift(action.payload);
 
         default:
             return state;

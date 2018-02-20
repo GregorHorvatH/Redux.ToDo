@@ -19,6 +19,8 @@ export default class Task extends Component {
             isEditing: false,
             newTodo:   props.message,
         };
+
+        this.editDebounce = false;
     }
 
     _complete = () => {
@@ -39,6 +41,13 @@ export default class Task extends Component {
     }
 
     _handleEditClick = () => {
+        if (this.editDebounce) {
+            return;
+        }
+
+        this.editDebounce = true;
+        setTimeout(() => this.editDebounce = false, 100);
+
         const { isEditing, newTodo } = this.state;
         const { id, updateTodo } = this.props;
         const pos = newTodo.length || 0;

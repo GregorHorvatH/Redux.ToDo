@@ -10,7 +10,8 @@ import todosActions from '../../actions/todos';
 import { todoMaxLength } from '../../instruments/config';
 
 // Components
-import Task from '../../components/Task';
+import Task from '../Task';
+import Spinner from '../Spinner';
 
 // Selectors
 import { getTodos } from '../../selectors/todos';
@@ -104,6 +105,7 @@ class Scheduler extends Component {
     render () {
         const { search, newTodo } = this.state;
         const { todos } = this.props;
+        const todoFetching = this.props.ui.get('todoFetching');
         const { deleteTodo, updateTodo } = this.props.actions;
         const allCompleted = todos.every((todo) => todo.completed);
         const todoList = todos.filter((todo) => todo.message.indexOf(search) > -1)
@@ -127,6 +129,7 @@ class Scheduler extends Component {
 
         return (
             <section className = { Styles.scheduler }>
+                <Spinner spin = { todoFetching } />
                 <main ref = { (ref) => this.main = ref }>
                     <header>
                         <h1>Планировщик задач</h1>
@@ -168,6 +171,7 @@ class Scheduler extends Component {
 
 const mapStateToProps = (state) => ({
     todos: getTodos(state),
+    ui:    state.ui,
 });
 
 const mapDispatchToProps = (dispatch) => ({

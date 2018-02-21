@@ -17,9 +17,6 @@ export default (state = initialState, action) => {
         case types.DELETE_TODO_SUCCESS:
             return state.filter((item) => item !== action.payload);
 
-        case types.UPDATE_TODO_SUCCESS:
-            return state;
-
         default:
             return state;
     }

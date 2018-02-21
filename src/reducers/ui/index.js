@@ -1,19 +1,19 @@
 // Core
-import { Record } from 'immutable';
+import { Map } from 'immutable';
 
 // Instruments
 import types from '../../actions/ui/types';
 
-const initialState = new Record({
+const initialState = Map({
     todoFetching: false,
-})();
+});
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case types.START_TODO_FETCHING:
+        case types.START_TODOS_FETCHING:
             return state.set('todoFetching', true);
 
-        case types.STOP_TODO_FETCHING:
+        case types.STOP_TODOS_FETCHING:
             return state.set('todoFetching', false);
 
         default:

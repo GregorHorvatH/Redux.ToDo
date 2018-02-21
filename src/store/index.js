@@ -7,10 +7,13 @@ import { fromJS } from 'immutable';
 // Instruments
 import reducer from '../reducers';
 import { saga } from '../sagas';
-import { loadState } from '../helpers';
-import { saveState } from '../helpers';
 import types from '../actions/todos/types';
-import { sortFavoritesFirst, sortCompleteLast } from '../helpers';
+import {
+    loadState,
+    saveState,
+    sortFavoritesFirst,
+    sortCompleteLast
+} from '../helpers';
 
 // Environment check
 const dev = process.env.NODE_ENV === 'development'; // eslint-disable-line

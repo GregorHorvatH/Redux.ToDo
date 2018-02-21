@@ -106,25 +106,24 @@ class Scheduler extends Component {
         const { todos } = this.props;
         const { deleteTodo, updateTodo } = this.props.actions;
         const allCompleted = todos.every((todo) => todo.completed);
-        const todoList = todos.map((todo) => {
-            const { id, message, completed, important } = todo;
+        const todoList = todos.filter((todo) => todo.message.indexOf(search) > -1)
+            .map((todo) => {
+                const { id, message, completed, important } = todo;
 
-            return (
-                <Task
-                    changePriority = { this._changePriority }
-                    complete = { this._complete }
-                    completed = { completed }
-                    deleteTodo = { deleteTodo }
-                    id = { id }
-                    important = { important }
-                    key = { id }
-                    message = { message }
-                    updateTodo = { updateTodo }
-                />
-            );
-        });
-
-        // debugger;
+                return (
+                    <Task
+                        changePriority = { this._changePriority }
+                        complete = { this._complete }
+                        completed = { completed }
+                        deleteTodo = { deleteTodo }
+                        id = { id }
+                        important = { important }
+                        key = { id }
+                        message = { message }
+                        updateTodo = { updateTodo }
+                    />
+                );
+            });
 
         return (
             <section className = { Styles.scheduler }>

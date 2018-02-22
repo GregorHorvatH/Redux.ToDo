@@ -7,12 +7,12 @@ import { bindActionCreators } from 'redux';
 import Styles from './styles';
 import Checkbox from 'theme/assets/Checkbox';
 import todosActions from '../../actions/todos';
-import { todoMaxLength } from '../../instruments/config';
 
 // Components
 import Task from '../Task';
 import Spinner from '../Spinner';
 import { ToastContainer } from 'react-toastify';
+import NewTodoForm from '../Forms/NewTodo';
 
 // Selectors
 import { getTodos } from '../../selectors/todos';
@@ -23,8 +23,7 @@ class Scheduler extends Component {
         super(props);
 
         this.state = {
-            newTodo: '',
-            search:  '',
+            search: '',
         };
 
         window.onresize = () => {
@@ -38,7 +37,6 @@ class Scheduler extends Component {
 
         this._setMainTopPosition();
         fetchTodos({ search });
-        this.input.focus();
     }
 
     // фикс изображения компонента на маленьком экране
@@ -50,23 +48,11 @@ class Scheduler extends Component {
         }
     }
 
-    _handleInputChange = (event) => {
-        const newTodo = event.target.value || '';
-
-        if (newTodo.length <= todoMaxLength) {
-            this.setState({ newTodo });
-        }
-    }
-
-    _handleSubmit = (event) => {
-        event.preventDefault();
-
+    _handleSubmit = ({ todo }) => {
         const { createTodo } = this.props.actions;
-        const { newTodo } = this.state;
 
-        if (newTodo.trim()) {
-            createTodo(newTodo);
-            this.setState({ newTodo: '' });
+        if (todo.trim()) {
+            createTodo(todo);
         }
     }
 
@@ -104,7 +90,7 @@ class Scheduler extends Component {
     }
 
     render () {
-        const { search, newTodo } = this.state;
+        const { search } = this.state;
         const { todos } = this.props;
         const { deleteTodo, updateTodo } = this.props.actions;
         const allCompleted = todos.every((todo) => todo.completed);
@@ -146,16 +132,7 @@ class Scheduler extends Component {
                         />
                     </header>
                     <section>
-                        <form onSubmit = { this._handleSubmit }>
-                            <input
-                                placeholder = 'Описание моей новой задачи'
-                                ref = { (ref) => this.input = ref }
-                                type = 'text'
-                                value = { newTodo }
-                                onChange = { this._handleInputChange }
-                            />
-                            <button>Добавить задачу</button>
-                        </form>
+                        <NewTodoForm onSubmit = { this._handleSubmit } />
                         <ul>{todoList}</ul>
                     </section>
                     <footer>

@@ -1,6 +1,7 @@
 // Core
 import { put, call } from 'redux-saga/effects';
 import { normalize } from 'normalizr';
+import { actions } from 'react-redux-form';
 
 // Instruments
 import uiActions from '../../../../actions/ui';
@@ -33,6 +34,8 @@ export function* createTodoWorker ({ payload }) {
             important: false,
             completed: false,
         }, todoSchema);
+
+        yield put(actions.change('forms.scheduler.todo', ''));
 
         yield put(todosActions.createTodoSuccess(normalizedTodos));
     } catch (error) {

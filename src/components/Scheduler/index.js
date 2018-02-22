@@ -12,7 +12,7 @@ import { todoMaxLength } from '../../instruments/config';
 // Components
 import Task from '../Task';
 import Spinner from '../Spinner';
-// import ErrorMessage from '../ErrorMessage';
+import { ToastContainer } from 'react-toastify';
 
 // Selectors
 import { getTodos } from '../../selectors/todos';
@@ -129,14 +129,13 @@ class Scheduler extends Component {
 
         const ui = this.props.ui;
         const todoFetching = ui.get('todoFetching');
-        // const errorMessage = ui.get('errorMessage');
 
         return (
             <section className = { Styles.scheduler }>
+                <ToastContainer />
                 <Spinner spin = { todoFetching } />
                 <main ref = { (ref) => this.main = ref }>
                     <header>
-                        {/* <ErrorMessage message = { errorMessage } /> */}
                         <h1>Планировщик задач</h1>
                         <input
                             placeholder = 'Поиск'

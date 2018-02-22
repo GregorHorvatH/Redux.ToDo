@@ -14,6 +14,7 @@ import {
     sortFavoritesFirst,
     sortCompleteLast
 } from '../helpers';
+import { notify } from './middleware';
 
 // Environment check
 const dev = process.env.NODE_ENV === 'development'; // eslint-disable-line
@@ -40,6 +41,7 @@ const logger = createLogger({
 
 if (dev) {
     middleware.push(logger);
+    middleware.push(notify);
 }
 
 const { entities, result } = loadState();

@@ -38,15 +38,15 @@ const logger = createLogger({
     },
 });
 
+if (dev) {
+    middleware.push(logger);
+}
+
 const { entities, result } = loadState();
 const persistedStore = {
     entities: fromJS(entities),
     result:   fromJS(result),
 };
-
-if (dev) {
-    middleware.push(logger);
-}
 
 const store = createStore(
     reducer,

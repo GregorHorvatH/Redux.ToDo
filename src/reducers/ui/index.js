@@ -6,6 +6,7 @@ import types from '../../actions/ui/types';
 
 const initialState = Map({
     todoFetching: false,
+    errorMessage: 'my error message',
 });
 
 export default (state = initialState, action) => {

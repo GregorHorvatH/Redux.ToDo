@@ -13,6 +13,7 @@ import Task from '../Task';
 import Spinner from '../Spinner';
 import { ToastContainer } from 'react-toastify';
 import NewTodoForm from '../Forms/NewTodo';
+import SearchForm from '../Forms/Search';
 
 // Selectors
 import { getTodos } from '../../selectors/todos';
@@ -22,10 +23,6 @@ class Scheduler extends Component {
     constructor (props) {
         super(props);
 
-        this.state = {
-            search: '',
-        };
-
         window.onresize = () => {
             this._setMainTopPosition();
         };
@@ -33,7 +30,7 @@ class Scheduler extends Component {
 
     componentDidMount () {
         const { fetchTodos } = this.props.actions;
-        const { search } = this.state;
+        const { search } = this.props.forms.scheduler;
 
         this._setMainTopPosition();
         fetchTodos({ search });
@@ -48,12 +45,18 @@ class Scheduler extends Component {
         }
     }
 
-    _handleSubmit = ({ todo }) => {
+    _handleNewTodoSubmit = ({ todo }) => {
         const { createTodo } = this.props.actions;
 
         if (todo.trim()) {
             createTodo(todo);
         }
+    }
+
+    _handleSearchSubmit = ({ search }) => {
+        const { fetchTodos } = this.props.actions;
+
+        fetchTodos({ search });
     }
 
     _complete = (id) => {
@@ -74,24 +77,9 @@ class Scheduler extends Component {
         completeAll();
     }
 
-    _handleSearchInputChange = (event) => {
-        const search = event.target.value || '';
-
-        this.setState({ search });
-    }
-
-    _handleSearchInputKeyPress = (event) => {
-        const { search } = this.state;
-        const { fetchTodos } = this.props.actions;
-
-        if (event.key === 'Enter') {
-            fetchTodos({ search });
-        }
-    }
-
     render () {
-        const { search } = this.state;
-        const { todos } = this.props;
+        const { todos, forms } = this.props;
+        const { search } = forms.scheduler;
         const { deleteTodo, updateTodo } = this.props.actions;
         const allCompleted = todos.every((todo) => todo.completed);
         const todoList = todos.filter((todo) => todo.message.indexOf(search) > -1)
@@ -123,16 +111,10 @@ class Scheduler extends Component {
                 <main ref = { (ref) => this.main = ref }>
                     <header>
                         <h1>Планировщик задач</h1>
-                        <input
-                            placeholder = 'Поиск'
-                            type = 'search'
-                            value = { search }
-                            onChange = { this._handleSearchInputChange }
-                            onKeyPress = { this._handleSearchInputKeyPress }
-                        />
+                        <SearchForm onSubmit = { this._handleSearchSubmit } />
                     </header>
                     <section>
-                        <NewTodoForm onSubmit = { this._handleSubmit } />
+                        <NewTodoForm onSubmit = { this._handleNewTodoSubmit } />
                         <ul>{todoList}</ul>
                     </section>
                     <footer>
@@ -153,6 +135,7 @@ class Scheduler extends Component {
 const mapStateToProps = (state) => ({
     todos: getTodos(state),
     ui:    state.ui,
+    forms: state.forms,
 });
 
 const mapDispatchToProps = (dispatch) => ({

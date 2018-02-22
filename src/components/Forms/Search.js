@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import { func } from 'prop-types';
 import { Form, Control } from 'react-redux-form';
 
-export default class NewTodo extends Component {
+export default class Search extends Component {
     static propTypes = {
         onSubmit: func.isRequired,
     };
 
-    _handleSubmit = (todo) => {
-        this.props.onSubmit(todo);
+    _handleSubmit = (search) => {
+        this.props.onSubmit(search);
     }
 
     render () {
@@ -18,14 +18,10 @@ export default class NewTodo extends Component {
                 model = 'forms.scheduler'
                 onSubmit = { this._handleSubmit }>
                 <Control
-                    id = 'forms.scheduler.todo'
-                    model = 'forms.scheduler.todo'
-                    placeholder = 'Описание моей новой задачи'
+                    id = 'forms.scheduler.search'
+                    model = 'forms.scheduler.search'
+                    placeholder = 'Поиск'
                 />
-                <button
-                    type = 'submit'>
-                    Добавить задачу
-                </button>
             </Form>
         );
     }

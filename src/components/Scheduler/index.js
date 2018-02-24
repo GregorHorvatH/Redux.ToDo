@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import FlipMove from 'react-flip-move';
 
 // Instruments
 import Styles from './styles';
@@ -115,7 +116,11 @@ class Scheduler extends Component {
                     </header>
                     <section>
                         <NewTodoForm onSubmit = { this._handleNewTodoSubmit } />
-                        <ul>{todoList}</ul>
+                        <ul>
+                            <FlipMove duration = { 300 } easing = 'ease-out'>
+                                {todoList}
+                            </FlipMove>
+                        </ul>
                     </section>
                     <footer>
                         <Checkbox
